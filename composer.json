@@ -1,0 +1,22 @@
+{
+    "name": "wendelladriel/simple-container",
+    "description": "Simple DI container implementation example",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Wendell Adriel",
+            "email": "wendelladriel.ti@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "WendellAdriel\\SimpleContainer\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "psr/container": "^2.0"
+    },
+    "minimum-stability": "stable"
+}
