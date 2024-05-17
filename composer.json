@@ -22,6 +22,10 @@
         "friendsofphp/php-cs-fixer": "^3.57"
     },
     "scripts": {
+        "app": [
+            "Composer\\Config::disableProcessTimeout",
+            "php ./public/index.php"
+        ],
         "lint": [
             "./vendor/bin/php-cs-fixer fix --allow-risky=yes"
         ]
