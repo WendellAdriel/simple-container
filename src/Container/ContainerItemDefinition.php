@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WendellAdriel\SimpleContainer\Container;
 
 final readonly class ContainerItemDefinition

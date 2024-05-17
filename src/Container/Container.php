@@ -13,10 +13,10 @@ use WendellAdriel\SimpleContainer\Container\Exceptions\NotFoundException;
 
 final class Container implements ContainerInterface
 {
-    /** @var array<string|class-string,ContainerItemDefinition>  */
+    /** @var array<string|class-string,ContainerItemDefinition> */
     private array $definitions = [];
 
-    /** @var array<string|class-string,mixed>  */
+    /** @var array<string|class-string,mixed> */
     private array $instances = [];
 
     /**
@@ -34,6 +34,7 @@ final class Container implements ContainerInterface
             }
 
             $this->set(id: $id, value: $id);
+
             return $this->build($id);
         }
 
@@ -43,6 +44,7 @@ final class Container implements ContainerInterface
             if ($definition->singleton) {
                 $this->addInstance(id: $id, value: $instance);
             }
+
             return $instance;
         }
 
@@ -51,6 +53,7 @@ final class Container implements ContainerInterface
             if ($definition->singleton) {
                 $this->addInstance(id: $id, value: $result);
             }
+
             return $result;
         }
 
@@ -133,11 +136,13 @@ final class Container implements ContainerInterface
 
                 if (! $parameterType->isBuiltin() && (class_exists($typeName) || $this->has($typeName))) {
                     $classArguments[] = $this->get($typeName);
+
                     continue;
                 }
 
                 if ($parameterType->isBuiltin() && $typeName === 'array' && ! $parameter->isDefaultValueAvailable()) {
                     $classArguments[] = [];
+
                     continue;
                 }
             }

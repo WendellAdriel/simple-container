@@ -23,7 +23,7 @@
     },
     "scripts": {
         "lint": [
-            "./vendor/bin/php-cs-fixer fix"
+            "./vendor/bin/php-cs-fixer fix --allow-risky=yes"
         ]
     },
     "minimum-stability": "stable"
