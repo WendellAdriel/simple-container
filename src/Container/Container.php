@@ -19,14 +19,42 @@ final class Container implements ContainerInterface
     /** @var array<string|class-string,mixed>  */
     private array $instances = [];
 
-    public function get(string $id)
+    /**
+     * @throws ContainerException|NotFoundException
+     */
+    public function get(string $id): mixed
     {
         if ($this->hasInstance($id)) {
             return $this->instances[$id];
         }
 
-        $this->instances[$id] = $this->make($id);
-        return $this->instances[$id];
+        if (! $this->has($id)) {
+            if (! class_exists($id)) {
+                throw new NotFoundException("'{$id}' is not a class name and is not set in the container");
+            }
+
+            $this->set(id: $id, value: $id);
+            return $this->build($id);
+        }
+
+        $definition = $this->definitions[$id];
+        if (is_string($definition->concrete) && class_exists($definition->concrete)) {
+            $instance = $this->build($definition->concrete);
+            if ($definition->singleton) {
+                $this->addInstance(id: $id, value: $instance);
+            }
+            return $instance;
+        }
+
+        if ($definition->concrete instanceof Closure) {
+            $result = call_user_func($definition->concrete, $this);
+            if ($definition->singleton) {
+                $this->addInstance(id: $id, value: $result);
+            }
+            return $result;
+        }
+
+        return $definition->concrete;
     }
 
     public function has(string $id): bool
@@ -64,34 +92,13 @@ final class Container implements ContainerInterface
         return array_key_exists($id, $this->instances);
     }
 
-    /**
-     * @throws NotFoundException|ContainerException
-     */
-    private function make(string $id): mixed
+    private function addInstance(string $id, mixed $value): void
     {
-        if (! $this->has($id)) {
-            if (! class_exists($id)) {
-                throw new NotFoundException("'{$id}' is not a class name and is not set in the container");
-            }
-
-            // TODO - implement set checking for Singleton attribute
-            return $this->build($id);
-        }
-
-        $definition = $this->definitions[$id];
-        if (is_string($definition->concrete) && class_exists($definition->concrete)) {
-            return $this->build($definition->concrete);
-        }
-
-        if ($definition->concrete instanceof Closure) {
-            return call_user_func($definition->concrete, $this);
-        }
-
-        return $definition->concrete;
+        $this->instances[$id] = $value;
     }
 
     /**
-     * @throws ContainerException
+     * @throws ContainerException|NotFoundException
      */
     private function build(string $id): mixed
     {
