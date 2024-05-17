@@ -18,5 +18,13 @@
         "php": "^8.3",
         "psr/container": "^2.0"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.57"
+    },
+    "scripts": {
+        "lint": [
+            "./vendor/bin/php-cs-fixer fix"
+        ]
+    },
     "minimum-stability": "stable"
 }
