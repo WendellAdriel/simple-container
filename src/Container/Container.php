@@ -65,13 +65,17 @@ final class Container implements ContainerInterface
         return array_key_exists($id, $this->definitions);
     }
 
-    public function set(string $id, mixed $value, bool $singleton = false): void
+    public function set(string $id, mixed $value = null, bool $singleton = false): void
     {
         $this->remove($id);
+        if (is_null($value)) {
+            $value = $id;
+        }
+
         $this->definitions[$id] = new ContainerItemDefinition(concrete: $value, singleton: $singleton);
     }
 
-    public function singleton(string $id, mixed $value): void
+    public function singleton(string $id, mixed $value = null): void
     {
         $this->remove($id);
         $this->set(id: $id, value: $value, singleton: true);
