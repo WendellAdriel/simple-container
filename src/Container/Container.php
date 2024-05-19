@@ -150,9 +150,13 @@ final class Container implements ContainerInterface
                     continue;
                 }
 
-                if (! $parameterType->isBuiltin() && (class_exists($typeName) || $this->has($typeName))) {
+                if (! $parameterType->isBuiltin() && class_exists($typeName)) {
                     $classArguments[] = $this->get($typeName);
                 }
+            }
+
+            if ($this->has($parameter->getName())) {
+                $classArguments[] = $this->get($parameter->getName());
             }
 
             $classArguments[] = null;
