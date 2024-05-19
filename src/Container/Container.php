@@ -33,7 +33,7 @@ final class Container implements ContainerInterface
                 throw new NotFoundException("'{$id}' is not a class name and is not set in the container");
             }
 
-            $this->set(id: $id, value: $id);
+            $this->set(id: $id);
 
             return $this->build($id);
         }
