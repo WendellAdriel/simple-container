@@ -135,6 +135,12 @@ final class Container implements ContainerInterface
                 throw new ContainerException("Failed to create object for '{$id}' - Constructor parameter '{$parameter->getName()}' can't be resolved");
             }
 
+            if ($parameter->isDefaultValueAvailable()) {
+                $classArguments[] = $parameter->getDefaultValue();
+
+                continue;
+            }
+
             if (! is_null($parameterType)) {
                 $typeName = $parameterType->getName();
 
@@ -144,15 +150,9 @@ final class Container implements ContainerInterface
                     continue;
                 }
 
-                if ($parameterType->isBuiltin() && $typeName === 'array' && ! $parameter->isDefaultValueAvailable()) {
+                if ($parameterType->isBuiltin() && $typeName === 'array') {
                     $classArguments[] = [];
-
-                    continue;
                 }
-            }
-
-            if ($parameter->isDefaultValueAvailable()) {
-                $classArguments[] = $parameter->getDefaultValue();
             }
         }
 
